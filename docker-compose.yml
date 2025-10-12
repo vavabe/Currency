@@ -1,0 +1,43 @@
+services:
+  testpostgres:
+     image: postgres
+     restart: always
+     environment:
+         POSTGRES_DB: currency_db_test
+         POSTGRES_USER: postgres
+         POSTGRES_PASSWORD: admin
+     volumes:
+       - pgdata:/var/lib/postgresql/dat
+
+  redis_image:
+    image: redis
+    container_name: cache
+    ports:
+      - "6379:6379"
+  currencyservices.currencyapp.restapi:
+    image: ${DOCKER_REGISTRY-}currencyservicescurrencyapprestapi
+    build:
+      context: .
+      dockerfile: CurrencyApp/CurrencyServices.CurrencyApp.RestApi/Dockerfile
+
+  currencyservices.currencyfetcher:
+    image: ${DOCKER_REGISTRY-}currencyservicescurrencyfetcher
+    build:
+      context: .
+      dockerfile: CurrencyFetcher/CurrencyServices.CurrencyFetcher/Dockerfile
+
+
+  currencyservices.dbmigrator.api:
+    image: ${DOCKER_REGISTRY-}currencyservicesdbmigratorapi
+    build:
+      context: .
+      dockerfile: DbMigrator/CurrencyServices.DbMigrator.Api/Dockerfile
+
+  currencyservices.userapp.restapi:
+    image: ${DOCKER_REGISTRY-}currencyservicesuserapprestapi
+    build:
+      context: .
+      dockerfile: CurrencyServices.UserApp.RestApi/Dockerfile
+
+volumes:
+  pgdata:

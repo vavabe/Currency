@@ -1,0 +1,23 @@
+﻿using CurrencyServices.CurrencyFetcher.Infrastructure.Interfaces;
+using CurrencyServices.CurrencyFetcher.Infrastructure.Options;
+using Microsoft.Extensions.Options;
+
+namespace CurrencyServices.CurrencyFetcher.Infrastructure.Services;
+
+public class HttpCurrencyFetchService : IHttpCurrencyFetchService
+{
+    private readonly CurrencyApiOptions _currencyApiOptions;
+    private readonly IHttpClientFactory _httpClientFactory;
+    public HttpCurrencyFetchService(IOptions<CurrencyApiOptions> options, IHttpClientFactory httpClientFactory)
+    {
+        _currencyApiOptions = options.Value;
+        _httpClientFactory = httpClientFactory;
+    }
+
+    public async Task<Stream> GetResponseAsStream()
+    {
+        var httpClient = _httpClientFactory.CreateClient();
+
+        return await httpClient.GetStreamAsync(_currencyApiOptions.ApiUrl);
+    }
+}

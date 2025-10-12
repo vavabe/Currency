@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "currencyservices.currencyapp.restapi": "StartDebugging",
+        "currencyservices.currencyfetcher": "StartDebugging",
+        "currencyservices.dbmigrator.api": "StartDebugging",
+        "currencyservices.userapp.restapi": "StartDebugging"
+      }
+    }
+  }
+}
