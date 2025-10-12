@@ -20,6 +20,7 @@ namespace CurrencyServices.UserApp.Infrastructure.Extensions
             services.Configure<CacheOptions>(configuration.GetSection(CacheOptions.Name));
             services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Name));
 
+            services.AddScoped<ICacheService, RedisCacheService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();

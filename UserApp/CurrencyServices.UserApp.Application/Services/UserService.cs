@@ -1,5 +1,6 @@
 ﻿using CurrencyServices.UserApp.Application.Exceptions;
 using CurrencyServices.UserApp.Application.Interfaces;
+using CurrencyServices.UserApp.Application.Models;
 using CurrencyServices.UserApp.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -22,23 +23,23 @@ namespace CurrencyServices.UserApp.Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task<string> Login(string username, string password)
+        public async Task<string> Login(LoginDto loginDto)
         {
-            var user = await _userRepository.GetUser(username);
+            var user = await _userRepository.GetUser(loginDto.UserName);
 
-            if (_passwordHasher.VerifyPassword(user.Password, password))
+            if (_passwordHasher.VerifyPassword(user.Password, loginDto.Password))
                 return _jwtTokenService.GetJwtToken(user.Id, user.Name);
             else
                 throw new WrongCredentialsException();
         }
 
-        public Task<bool> Logout(string token) => _jwtTokenService.InvalidateToken(token);
+        public Task<bool> Logout(LogoutDto logoutDto) => _jwtTokenService.InvalidateToken(logoutDto.Token);
 
-        public async Task<bool> Register(string username, string password)
+        public async Task<bool> Register(RegisterDto registerDto)
         {
-            var hashedPassword = _passwordHasher.HashPassword(password);
+            var hashedPassword = _passwordHasher.HashPassword(registerDto.Password);
 
-            await _userRepository.AddUser(username, password);
+            await _userRepository.AddUser(registerDto.UserName, hashedPassword);
 
             return true;
         }

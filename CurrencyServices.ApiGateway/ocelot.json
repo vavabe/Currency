@@ -1,0 +1,78 @@
+{
+  "Routes": [
+    {
+      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamPathTemplate": "/api/user/{everything}",
+      "DownstreamPathTemplate": "/api/user/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user-app",
+          "Port": 8080
+        }
+      ],
+      "SwaggerKey": "Users"
+    },
+    {
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamPathTemplate": "/api/currency/{everything}",
+      "DownstreamPathTemplate": "/api/currency/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "currency-app",
+          "Port": 8080
+        }
+      ],
+      "SwaggerKey": "Currency"
+    },
+    {
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "UpstreamPathTemplate": "/api/migration/{everything}",
+      "DownstreamPathTemplate": "/api/migration/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "db-migrator",
+          "Port": 8080
+        }
+      ],
+      "SwaggerKey": "DbMigrator"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5555"
+  },
+  "SwaggerEndPoints": [
+    {
+      "Key": "Users",
+      "Config": [
+        {
+          "Name": "User API",
+          "Version": "v1",
+          "Url": "http://user-app:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "Currency",
+      "Config": [
+        {
+          "Name": "Currency API",
+          "Version": "v1",
+          "Url": "http://currency-app:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "DbMigrator",
+      "Config": [
+        {
+          "Name": "Database Migration API",
+          "Version": "v1",
+          "Url": "http://db-migrator:8080/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}
