@@ -47,6 +47,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyServices.ApiGateway", "CurrencyServices.ApiGateway\CurrencyServices.ApiGateway.csproj", "{3689DE87-32D1-4FDF-9503-965A91B0935F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyServices.CurencyApp.Tests", "CurrencyApp\CurrencyServices.CurencyApp.Tests\CurrencyServices.CurencyApp.Tests.csproj", "{7FC9BC71-09DC-49A5-9181-0100A74AA46D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{3689DE87-32D1-4FDF-9503-965A91B0935F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3689DE87-32D1-4FDF-9503-965A91B0935F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3689DE87-32D1-4FDF-9503-965A91B0935F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FC9BC71-09DC-49A5-9181-0100A74AA46D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FC9BC71-09DC-49A5-9181-0100A74AA46D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FC9BC71-09DC-49A5-9181-0100A74AA46D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FC9BC71-09DC-49A5-9181-0100A74AA46D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,6 +148,7 @@ Global
 		{ACC08FC3-CE9E-4BD4-8A8F-E4CE4716BE4B} = {3C850A78-C2C4-4ADB-9B49-9A08E6BC8A8F}
 		{DF6E8240-A3BA-4848-A225-29A9970FBA50} = {3C850A78-C2C4-4ADB-9B49-9A08E6BC8A8F}
 		{3689DE87-32D1-4FDF-9503-965A91B0935F} = {013FEB9A-D293-491D-AAA3-59116C1F47FF}
+		{7FC9BC71-09DC-49A5-9181-0100A74AA46D} = {CF045AB7-F015-4A54-A31D-53D04EAD5344}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FB2B0BB7-574A-4F85-92AE-0B126DF6B840}

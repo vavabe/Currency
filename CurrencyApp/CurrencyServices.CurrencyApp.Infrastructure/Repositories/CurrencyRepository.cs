@@ -11,10 +11,12 @@ namespace CurrencyServices.CurrencyApp.Infrastructure.Repositories
     public class CurrencyRepository : ICurrencyRepository
     {
         private readonly DbOptions _dbOptions;
+        private readonly IDapperWrapper _dapper;
 
-        public CurrencyRepository(IOptions<DbOptions> options)
+        public CurrencyRepository(IOptions<DbOptions> options, IDapperWrapper dapper)
         {
             _dbOptions = options.Value;
+            _dapper = dapper;
         }
 
         public async Task<string> AddToFavorite(Guid currencyId, Guid userId)
@@ -25,7 +27,7 @@ namespace CurrencyServices.CurrencyApp.Infrastructure.Repositories
             ";
             using (IDbConnection connection = new NpgsqlConnection(_dbOptions.ConnectionString))
             {
-                var result = await connection.ExecuteAsync(sql, new { CurrencyId = currencyId, UserId = userId });
+                var result = await _dapper.ExecuteAsync(connection, sql, new { CurrencyId = currencyId, UserId = userId });
                 return result.ToString();
             }
         }
@@ -37,7 +39,7 @@ namespace CurrencyServices.CurrencyApp.Infrastructure.Repositories
                     WHERE f.""UserId"" = @UserId";
             using (IDbConnection connection = new NpgsqlConnection(_dbOptions.ConnectionString))
             {
-                return await connection.QueryAsync<Currency>(sql, new { UserId = userId });
+                return await _dapper.QueryAsync<Currency>(connection, sql, new { UserId = userId });
             }
         }
     }
