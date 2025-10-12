@@ -19,6 +19,7 @@ namespace CurrencyServices.CurrencyApp.Infrastructure.Extensions
             services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Name));
             services.Configure<DbOptions>(configuration.GetSection(DbOptions.Name));
 
+            services.AddScoped<IDapperWrapper, DapperWrapper>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
 
             return services;
