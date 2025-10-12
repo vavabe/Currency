@@ -2,6 +2,7 @@ services:
   testpostgres:
      image: postgres
      restart: always
+     hostname: testpostgres
      environment:
          POSTGRES_DB: currency_db_test
          POSTGRES_USER: postgres
@@ -11,17 +12,23 @@ services:
 
   redis_image:
     image: redis
+    hostname: cache
     container_name: cache
     ports:
       - "6379:6379"
+
   currencyservices.currencyapp.restapi:
     image: ${DOCKER_REGISTRY-}currencyservicescurrencyapprestapi
+    hostname: currency-app
+    container_name: currency-app
     build:
       context: .
       dockerfile: CurrencyApp/CurrencyServices.CurrencyApp.RestApi/Dockerfile
 
   currencyservices.currencyfetcher:
     image: ${DOCKER_REGISTRY-}currencyservicescurrencyfetcher
+    hostname: currency-fetcher
+    container_name: currency-fetcher
     build:
       context: .
       dockerfile: CurrencyFetcher/CurrencyServices.CurrencyFetcher/Dockerfile
@@ -29,15 +36,27 @@ services:
 
   currencyservices.dbmigrator.api:
     image: ${DOCKER_REGISTRY-}currencyservicesdbmigratorapi
+    hostname: db-migrator
+    container_name: db-migrator
     build:
       context: .
       dockerfile: DbMigrator/CurrencyServices.DbMigrator.Api/Dockerfile
 
   currencyservices.userapp.restapi:
     image: ${DOCKER_REGISTRY-}currencyservicesuserapprestapi
+    hostname: user-app
+    container_name: user-app
     build:
       context: .
       dockerfile: CurrencyServices.UserApp.RestApi/Dockerfile
+
+  currencyservices.apigateway:
+    image: ${DOCKER_REGISTRY-}currencyservicesapigateway
+    hostname: api-gateway
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: CurrencyServices.ApiGateway/Dockerfile
 
 volumes:
   pgdata:

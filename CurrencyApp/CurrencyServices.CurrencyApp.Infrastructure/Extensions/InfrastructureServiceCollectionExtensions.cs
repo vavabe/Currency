@@ -15,7 +15,8 @@ namespace CurrencyServices.CurrencyApp.Infrastructure.Extensions
     public static class InfrastructureServiceCollectionExtensions
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
-        {
+        { 
+            services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Name));
             services.Configure<DbOptions>(configuration.GetSection(DbOptions.Name));
 
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();

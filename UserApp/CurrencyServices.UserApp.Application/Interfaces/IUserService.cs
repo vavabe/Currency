@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CurrencyServices.UserApp.Application.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace CurrencyServices.UserApp.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<string> Login(string username, string password);
-        Task<bool> Register(string username, string password);
-        Task<bool> Logout(string token);
+        Task<string> Login(LoginDto loginDto);
+        Task<bool> Register(RegisterDto registerDto);
+        Task<bool> Logout(LogoutDto logoutDto);
     }
 }

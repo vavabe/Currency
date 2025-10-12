@@ -31,7 +31,6 @@ public class Program
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Database Migration API v1");
             });
         }
-        app.UseHttpsRedirection();
         app.MapControllers();
 
         app.Run();
