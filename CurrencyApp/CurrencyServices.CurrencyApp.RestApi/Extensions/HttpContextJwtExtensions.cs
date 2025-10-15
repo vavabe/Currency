@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
 
-namespace CurrencyServices.CurrencyApp.RestApi.Helpers;
+namespace CurrencyServices.CurrencyApp.RestApi.Extensions;
 
-public static class JwtUserIdExtractor
+public static class HttpContextJwtExtensions
 {
-    public static Guid? ExtractUserId(HttpContext context)
+    public static Guid? ExtractUserId(this HttpContext context)
     {
         var claims = context.User.Identity as ClaimsIdentity;
         if (claims != null)

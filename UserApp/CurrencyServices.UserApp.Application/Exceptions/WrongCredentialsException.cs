@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace CurrencyServices.UserApp.Application.Exceptions;
 
-namespace CurrencyServices.UserApp.Application.Exceptions
+public class WrongCredentialsException : Exception
 {
-    public class WrongCredentialsException : Exception
-    {
-    }
 }

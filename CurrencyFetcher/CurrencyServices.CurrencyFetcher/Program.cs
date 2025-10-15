@@ -1,5 +1,6 @@
 using CurrencyServices.CurrencyFetcher.Application.Extensions;
 using CurrencyServices.CurrencyFetcher.Infrastructure.Extensions;
+using CurrencyServices.CurrencyFetcher.Middlewares;
 
 namespace CurrencyServices.CurrencyFetcher;
 
@@ -12,6 +13,8 @@ public class Program
         builder.Services.AddApplicationServices(builder.Configuration);
 
         var app = builder.Build();
+
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.Run();
     }
