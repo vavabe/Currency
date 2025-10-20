@@ -1,4 +1,4 @@
-﻿using CurrencyServices.UserApp.Application.Interfaces;
+﻿using CurrencyServices.ApiGateway.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 

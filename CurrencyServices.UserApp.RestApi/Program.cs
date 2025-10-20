@@ -1,5 +1,4 @@
 using CurrencyServices.UserApp.Application.Extensions;
-using CurrencyServices.UserApp.Application.Middlewares;
 using CurrencyServices.UserApp.Infrastructure.Extensions;
 using CurrencyServices.UserApp.Infrastructure.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -79,8 +78,6 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
-
-        app.UseMiddleware<TokenBlacklistMiddleware>();
 
         app.Run();
     }

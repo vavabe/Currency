@@ -26,14 +26,4 @@ public class RedisCacheService : ICacheService
         });
         return true;
     }
-
-    public async Task<bool> ContainsValue(string key)
-    {
-        var valueBytes = await _distributedCache.GetAsync(key);
-        if (valueBytes == null || valueBytes.Length == 0)
-            return false;
-
-        var value = System.Text.Encoding.UTF8.GetString(valueBytes);
-        return !string.IsNullOrEmpty(value);
-    }
 }

@@ -1,4 +1,5 @@
 ﻿using CurrencyServices.UserApp.Application.Interfaces;
+using CurrencyServices.UserApp.Infrastructure.Interfaces;
 using CurrencyServices.UserApp.Infrastructure.Options;
 using CurrencyServices.UserApp.Infrastructure.Repositories;
 using CurrencyServices.UserApp.Infrastructure.Services;
@@ -11,6 +12,7 @@ public static class InfrastructureServiceCollectionExtensions
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IDapperWrapper, DapperWrapper>();
         services.Configure<DbOptions>(configuration.GetSection(DbOptions.Name));
         services.Configure<CacheOptions>(configuration.GetSection(CacheOptions.Name));
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Name));

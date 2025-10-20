@@ -1,6 +1,7 @@
 ﻿using CurrencyServices.UserApp.Application.Exceptions;
 using CurrencyServices.UserApp.Application.Interfaces;
 using CurrencyServices.UserApp.Application.Models;
+using CurrencyServices.UserApp.RestApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,8 +47,12 @@ public class UserController : ControllerBase
 
     [HttpPost("logout")]
     [Authorize]
-    public async Task<IActionResult> LogoutUser([FromBody] LogoutDto logoutDto, CancellationToken cancellationToken)
+    public async Task<IActionResult> LogoutUser(CancellationToken cancellationToken)
     {
+        var logoutDto = new LogoutDto
+        {
+            Token = await HttpContext.ExtractJwtToken()
+        };
         var result = await _userService.Logout(logoutDto);
         if (result)
             return Ok();
