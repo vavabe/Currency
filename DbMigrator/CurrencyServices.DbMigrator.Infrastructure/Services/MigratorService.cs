@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Npgsql;
 using System.Data;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace CurrencyServices.Migrator.Infrastructure.Services;
 

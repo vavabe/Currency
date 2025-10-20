@@ -24,19 +24,17 @@ public class CurrencyFetcherBackgroundService : ICurrencyFetcherBackgroundServic
         {
             try
             {
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var currencyService = scope.ServiceProvider.GetRequiredService<ICurrencyService>();
+                using var scope = _serviceProvider.CreateScope();
+                var currencyService = scope.ServiceProvider.GetRequiredService<ICurrencyService>();
 
-                    var result = await currencyService.FetchCurrenciesAndSave();
-                }
+                var result = await currencyService.FetchCurrenciesAndSave();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
+                // Логирование или обработка исключения может быть добавлена здесь при необходимости
             }
 
-            await Task.Delay(TimeSpan.FromMinutes(_backgroundServiceOptions.DelayInMinutes));
+            await Task.Delay(TimeSpan.FromMinutes(_backgroundServiceOptions.DelayInMinutes), cancellationToken);
         }
     }
 

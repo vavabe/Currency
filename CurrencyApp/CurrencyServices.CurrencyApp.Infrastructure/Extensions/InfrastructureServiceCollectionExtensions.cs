@@ -1,28 +1,34 @@
 ﻿
 using CurrencyServices.CurrencyApp.Application.Interfaces;
+using CurrencyServices.CurrencyApp.Infrastructure.Interfaces;
 using CurrencyServices.CurrencyApp.Infrastructure.Options;
 using CurrencyServices.CurrencyApp.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Serilog;
 
-namespace CurrencyServices.CurrencyApp.Infrastructure.Extensions
+namespace CurrencyServices.CurrencyApp.Infrastructure.Extensions;
+
+public static class InfrastructureServiceCollectionExtensions
 {
-    public static class InfrastructureServiceCollectionExtensions
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
-        { 
-            services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Name));
-            services.Configure<DbOptions>(configuration.GetSection(DbOptions.Name));
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build())
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateLogger();
 
-            services.AddScoped<IDapperWrapper, DapperWrapper>();
-            services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+        services.AddSerilog();
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Name));
+        services.Configure<DbOptions>(configuration.GetSection(DbOptions.Name));
 
-            return services;
-        }
+        services.AddScoped<IDapperWrapper, DapperWrapper>();
+        services.AddScoped<ICurrencyRepository, DapperCurrencyRepository>();
+
+        return services;
     }
 }

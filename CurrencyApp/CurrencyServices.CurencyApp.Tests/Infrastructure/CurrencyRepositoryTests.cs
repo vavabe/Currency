@@ -1,59 +1,87 @@
-﻿using CurrencyServices.CurrencyApp.Application.Interfaces;
+﻿using CurrencyServices.CurrencyApp.Domain.Entities;
+using CurrencyServices.CurrencyApp.Infrastructure.Interfaces;
 using CurrencyServices.CurrencyApp.Infrastructure.Options;
 using CurrencyServices.CurrencyApp.Infrastructure.Repositories;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CurrencyServices.CurencyApp.Tests.Infrastructure
+namespace CurrencyServices.CurencyApp.Tests.Infrastructure;
+
+public class CurrencyRepositoryTests
 {
-    public class CurrencyRepositoryTests
+    private readonly Mock<IDapperWrapper> _dapperWrapperMock = new Mock<IDapperWrapper>();
+    private readonly Mock<IOptions<DbOptions>> _dbOptionsMock = new Mock<IOptions<DbOptions>>();
+    private readonly DapperCurrencyRepository _repository;
+
+    public CurrencyRepositoryTests()
     {
-        private readonly Mock<IDapperWrapper> _dapperWrapperMock = new Mock<IDapperWrapper>();
-        private readonly Mock<IOptions<DbOptions>> _dbOptionsMock = new Mock<IOptions<DbOptions>>();
-        private readonly CurrencyRepository _currencyRepository;
+        _dbOptionsMock.Setup(x => x.Value).Returns(new DbOptions());
+        _repository = new DapperCurrencyRepository(_dbOptionsMock.Object, _dapperWrapperMock.Object);
+    }
 
-        public CurrencyRepositoryTests()
+    [Fact]
+    public async Task AddToFavorite_ReturnsExpectedResult()
+    {
+        var userId = Guid.NewGuid();
+        var currencyId = Guid.NewGuid();
+        var expected = 1;
+
+        _dapperWrapperMock
+            .Setup(x => x.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<object?>()))
+            .ReturnsAsync(expected);
+
+        var result = await _repository.AddToFavorite(currencyId, userId);
+
+        result.Should().Be(expected.ToString());
+    }
+
+    [Fact]
+    public async Task AddToFavorite_WhenDapperThrows_ThrowsException()
+    {
+        var userId = Guid.NewGuid();
+        var currencyId = Guid.NewGuid();
+
+        _dapperWrapperMock
+            .Setup(x => x.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<object?>()))
+            .ThrowsAsync(new Exception("DB error"));
+
+        Func<Task> act = async () => await _repository.AddToFavorite(currencyId, userId);
+
+        await act.Should().ThrowAsync<Exception>().WithMessage("DB error");
+    }
+
+    [Fact]
+    public async Task GetFavoritesByUser_ReturnsExpectedCurrencies()
+    {
+        var userId = Guid.NewGuid();
+        var expected = new List<Currency>
         {
-            _dbOptionsMock.Setup(x => x.Value).Returns(new DbOptions());
-            _currencyRepository = new CurrencyRepository(_dbOptionsMock.Object, 
-                _dapperWrapperMock.Object);
-        }
+            new Currency { Name = "USD", Rate = 90.5m },
+            new Currency { Name = "EUR", Rate = 100.1m }
+        };
 
-        [Fact]
-        public async Task AddToFavorite_ReturnsExpected()
-        {
-            var userId = Guid.NewGuid();
-            var currencyId = Guid.NewGuid();
-            var insertedCount = 1;
+        _dapperWrapperMock
+            .Setup(x => x.QueryAsync<Currency>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<object?>()))
+            .ReturnsAsync(expected);
 
-            _dapperWrapperMock.Setup(x => x.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<object?>()))
-                .ReturnsAsync(insertedCount);
+        var result = await _repository.GetFavoritesByUser(userId);
 
-            var result = await _currencyRepository.AddToFavorite(currencyId, userId);
+        result.Should().BeEquivalentTo(expected);
+    }
 
-            result.Should().Be(insertedCount.ToString());
-        }
+    [Fact]
+    public async Task GetFavoritesByUser_WhenDapperThrows_ThrowsException()
+    {
+        var userId = Guid.NewGuid();
 
-        [Fact]
-        public async Task AddToFavorite_DapperThrowsException_ThrowsException()
-        {
-            var userId = Guid.NewGuid();
-            var currencyId = Guid.NewGuid();
-            var insertedCount = 1;
+        _dapperWrapperMock
+            .Setup(x => x.QueryAsync<Currency>(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<object?>()))
+            .ThrowsAsync(new Exception("Query error"));
 
-            _dapperWrapperMock.Setup(x => x.ExecuteAsync(It.IsAny<IDbConnection>(), It.IsAny<string>(), It.IsAny<object?>()))
-                .ThrowsAsync(new Exception());
+        Func<Task> act = async () => await _repository.GetFavoritesByUser(userId);
 
-            Func<Task<string>> result = async () => await _currencyRepository.AddToFavorite(currencyId, userId);
-
-            result.Should().ThrowAsync();
-        }
+        await act.Should().ThrowAsync<Exception>().WithMessage("Query error");
     }
 }
